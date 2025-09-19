@@ -746,7 +746,7 @@ export default function Home() {
           <div className="bg-white rounded-xl shadow-xl border border-gray-200 p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-3">
-                <span className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-lg shadow-md flex items-center gap-2">
+                <span className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md flex items-center gap-2">
                   <Users className="w-5 h-5" />
                   검색 결과
                 </span>
@@ -768,9 +768,9 @@ export default function Home() {
               <div className="overflow-x-auto border-2 border-gray-200 rounded-xl shadow-lg bg-white">
                 <table className="w-full border-collapse bg-white">
                   <thead className="sticky top-0 z-10">
-                    <tr className="bg-gradient-to-r from-blue-500 to-blue-600">
+                    <tr className="bg-blue-500">
                       <th
-                        className="border border-gray-300 px-6 py-4 text-left font-bold text-white text-sm uppercase tracking-wider shadow-sm sticky top-0 bg-gradient-to-r from-blue-500 to-blue-600"
+                        className="border-2 border-gray-400 px-6 py-4 text-left font-bold text-white text-sm uppercase tracking-wider shadow-sm sticky top-0 bg-blue-500"
                         onMouseEnter={() => handleColumnHover(0)}
                         onMouseLeave={() => handleColumnHover(null)}
                       >
@@ -780,7 +780,7 @@ export default function Home() {
                         Object.keys(excelData[0]).map((key, index) => (
                           <th
                             key={index}
-                            className="border border-gray-300 px-6 py-4 text-left font-bold text-white text-sm uppercase tracking-wider shadow-sm sticky top-0 bg-gradient-to-r from-blue-500 to-blue-600"
+                            className="border-2 border-gray-400 px-6 py-4 text-left font-bold text-white text-sm uppercase tracking-wider shadow-sm sticky top-0 bg-blue-500"
                             onMouseEnter={() => handleColumnHover(index + 1)}
                             onMouseLeave={() => handleColumnHover(null)}
                           >
@@ -797,7 +797,7 @@ export default function Home() {
                         className="hover:bg-green-100 transition-all duration-0 hover:shadow-md hover:scale-[1.01] group cursor-pointer"
                       >
                         <td
-                          className={`border border-gray-200 px-4 py-4 font-bold text-blue-600 bg-gradient-to-r from-blue-25 to-blue-50 group-hover:bg-green-100 transition-colors duration-0 min-w-[80px] ${
+                          className={`border-2 border-gray-300 px-4 py-4 font-bold text-black bg-blue-50 group-hover:bg-green-100 transition-colors duration-0 min-w-[80px] ${
                             hoveredColumn === 0 ? "bg-yellow-100" : ""
                           }`}
                         >
@@ -806,7 +806,7 @@ export default function Home() {
                         {Object.values(result.data).map((value, cellIndex) => (
                           <td
                             key={cellIndex}
-                            className={`border border-gray-200 px-2 py-4 text-gray-700 bg-white group-hover:bg-green-100 transition-colors duration-0 w-auto whitespace-nowrap ${
+                            className={`border-2 border-gray-300 px-2 py-4 text-black font-bold bg-white group-hover:bg-green-100 transition-colors duration-0 w-auto whitespace-nowrap ${
                               hoveredColumn === cellIndex + 1
                                 ? "bg-yellow-100"
                                 : ""
@@ -828,7 +828,7 @@ export default function Home() {
         {excelData.length > 0 && (
           <div className="mt-8">
             <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-              <span className="bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-2 rounded-lg shadow-md">
+              <span className="bg-green-500 text-white px-4 py-2 rounded-lg shadow-md">
                 📊 전체 데이터
               </span>
               <span className="bg-gray-100 text-gray-700 px-3 py-2 rounded-lg text-lg font-semibold">
@@ -847,18 +847,18 @@ export default function Home() {
                       data-row={index + 1}
                       className={`hover:bg-green-100 transition-all duration-0 hover:shadow-md hover:scale-[1.01] group ${
                         highlightedRow === index + 1
-                          ? "bg-gradient-to-r from-yellow-200 to-yellow-300 shadow-lg scale-[1.02] border-2 border-yellow-400"
+                          ? "bg-yellow-200 shadow-lg scale-[1.02] border-2 border-yellow-400"
                           : ""
                       } ${
                         index === 2
-                          ? "sticky top-0 z-20 bg-gradient-to-r from-green-500 to-green-600 shadow-lg"
+                          ? "sticky top-0 z-20 bg-green-500 shadow-lg"
                           : ""
                       }`}
                     >
                       <td
-                        className={`border border-gray-200 px-4 py-4 font-bold text-green-600 bg-gradient-to-r from-green-25 to-green-50 group-hover:bg-green-100 transition-colors duration-0 min-w-[80px] ${
+                        className={`border-2 border-gray-300 px-4 py-4 font-bold text-black bg-green-50 group-hover:bg-green-100 transition-colors duration-0 min-w-[80px] ${
                           index === 2
-                            ? "sticky top-0 z-20 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold"
+                            ? "sticky top-0 z-20 bg-green-500 text-black font-bold"
                             : ""
                         } ${index === 2 ? "font-bold" : ""} ${
                           hoveredColumn === 0 ? "bg-yellow-100" : ""
@@ -871,9 +871,9 @@ export default function Home() {
                       {Object.values(row).map((value, cellIndex) => (
                         <td
                           key={cellIndex}
-                          className={`border border-gray-200 px-2 py-4 text-gray-700 bg-white group-hover:bg-green-100 transition-colors duration-0 w-auto whitespace-nowrap ${
+                          className={`border-2 border-gray-300 px-2 py-4 text-black font-bold bg-white group-hover:bg-green-100 transition-colors duration-0 w-auto whitespace-nowrap ${
                             index === 2
-                              ? "sticky top-0 z-20 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold"
+                              ? "sticky top-0 z-20 bg-green-500 text-black font-bold"
                               : ""
                           } ${index === 2 ? "font-bold" : ""} ${
                             hoveredColumn === cellIndex + 1
