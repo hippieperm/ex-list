@@ -29,7 +29,6 @@ export default function Home() {
 
   // 경매장 엑셀의 고정 헤더 정의 (이미지 기준 - 17개 컬럼)
   const auctionHeaders = [
-    "순번",
     "품명",
     "수량",
     "출품자",
@@ -116,40 +115,172 @@ export default function Home() {
       .join("");
   };
 
-  // 한글을 영문으로 변환하는 함수 (간단한 매핑)
+  // 한글을 영문으로 변환하는 함수 (완전한 매핑)
   const koreanToEnglish = (text: string): string => {
-    const mapping: { [key: string]: string } = {
-      ㅏ: "k",
-      ㅓ: "j",
-      ㅗ: "h",
-      ㅜ: "n",
-      ㅡ: "m",
-      ㅣ: "l",
-      ㅑ: "i",
-      ㅕ: "u",
-      ㅛ: "y",
-      ㅠ: "b",
-      ㄱ: "r",
-      ㄴ: "s",
-      ㄷ: "e",
-      ㄹ: "f",
-      ㅁ: "a",
-      ㅂ: "q",
-      ㅅ: "t",
-      ㅇ: "d",
-      ㅈ: "w",
-      ㅊ: "c",
-      ㅋ: "z",
-      ㅌ: "x",
-      ㅍ: "v",
-      ㅎ: "g",
+    // 한글 자모 분리 및 영문 변환
+    const convertKoreanToEnglish = (char: string): string => {
+      const code = char.charCodeAt(0);
+
+      // 한글 범위 체크 (가-힣)
+      if (code >= 0xac00 && code <= 0xd7a3) {
+        const base = code - 0xac00;
+        const 초성 = Math.floor(base / 588);
+        const 중성 = Math.floor((base % 588) / 28);
+        const 종성 = base % 28;
+
+        const 초성Map = [
+          "r",
+          "R",
+          "s",
+          "e",
+          "E",
+          "f",
+          "a",
+          "q",
+          "Q",
+          "t",
+          "T",
+          "d",
+          "w",
+          "W",
+          "c",
+          "z",
+          "x",
+          "v",
+          "g",
+        ];
+        const 중성Map = [
+          "k",
+          "o",
+          "i",
+          "O",
+          "j",
+          "p",
+          "u",
+          "P",
+          "h",
+          "hk",
+          "ho",
+          "hl",
+          "y",
+          "n",
+          "nj",
+          "np",
+          "nl",
+          "b",
+          "m",
+          "ml",
+          "l",
+        ];
+        const 종성Map = [
+          "",
+          "r",
+          "R",
+          "rt",
+          "s",
+          "sw",
+          "sg",
+          "e",
+          "f",
+          "fr",
+          "fa",
+          "fq",
+          "ft",
+          "fx",
+          "fv",
+          "fg",
+          "a",
+          "q",
+          "qt",
+          "t",
+          "T",
+          "d",
+          "w",
+          "c",
+          "z",
+          "x",
+          "v",
+          "g",
+        ];
+
+        const 초성Char = 초성Map[초성] || "";
+        const 중성Char = 중성Map[중성] || "";
+        const 종성Char = 종성Map[종성] || "";
+
+        return 초성Char + 중성Char + 종성Char;
+      }
+
+      // 초성만 있는 경우
+      const 초성Map: { [key: string]: string } = {
+        ㄱ: "r",
+        ㄲ: "R",
+        ㄴ: "s",
+        ㄷ: "e",
+        ㄸ: "E",
+        ㄹ: "f",
+        ㅁ: "a",
+        ㅂ: "q",
+        ㅃ: "Q",
+        ㅅ: "t",
+        ㅆ: "T",
+        ㅇ: "d",
+        ㅈ: "w",
+        ㅉ: "W",
+        ㅊ: "c",
+        ㅋ: "z",
+        ㅌ: "x",
+        ㅍ: "v",
+        ㅎ: "g",
+      };
+
+      return 초성Map[char] || char;
+    };
+
+    return text.split("").map(convertKoreanToEnglish).join("");
+  };
+
+  // 영어를 한글로 변환하는 함수 (역변환)
+  const englishToKorean = (text: string): string => {
+    // 간단한 역변환 매핑
+    const engToKoreanMap: { [key: string]: string } = {
+      r: "ㄱ",
+      R: "ㄲ",
+      s: "ㄴ",
+      e: "ㄷ",
+      E: "ㄸ",
+      f: "ㄹ",
+      a: "ㅁ",
+      q: "ㅂ",
+      Q: "ㅃ",
+      t: "ㅅ",
+      T: "ㅆ",
+      d: "ㅇ",
+      w: "ㅈ",
+      W: "ㅉ",
+      c: "ㅊ",
+      z: "ㅋ",
+      x: "ㅌ",
+      v: "ㅍ",
+      g: "ㅎ",
+      k: "ㅏ",
+      o: "ㅐ",
+      i: "ㅑ",
+      O: "ㅒ",
+      j: "ㅓ",
+      p: "ㅔ",
+      u: "ㅕ",
+      P: "ㅖ",
+      h: "ㅗ",
+      y: "ㅛ",
+      n: "ㅜ",
+      b: "ㅠ",
+      m: "ㅡ",
+      l: "ㅣ",
     };
 
     return text
       .split("")
-      .map((char) => {
-        return mapping[char] || char;
-      })
+      .map((char) => engToKoreanMap[char] || char)
       .join("");
   };
 
@@ -259,6 +390,7 @@ export default function Home() {
     const lowerTerm = term.toLowerCase();
     const initialsTerm = getInitials(term);
     const englishTerm = koreanToEnglish(term);
+    const koreanTerm = englishToKorean(term); // 영어를 한글로 역변환
 
     excelData.forEach((row, index) => {
       // 순번 검색 모드
@@ -292,13 +424,19 @@ export default function Home() {
           return;
         }
 
-        // 각 셀별로 초성 검색
+        // 각 셀별로 다양한 검색 방식 적용
         Object.values(row).forEach((cellValue) => {
           const cellStr = String(cellValue);
           const cellInitials = getInitials(cellStr);
+          const cellEnglish = koreanToEnglish(cellStr);
+          const cellKorean = englishToKorean(cellStr);
+
           if (
             cellInitials.toLowerCase().includes(initialsTerm.toLowerCase()) ||
-            cellStr.toLowerCase().includes(lowerTerm)
+            cellStr.toLowerCase().includes(lowerTerm) ||
+            cellEnglish.toLowerCase().includes(englishTerm.toLowerCase()) ||
+            cellKorean.includes(koreanTerm) ||
+            cellStr.toLowerCase().includes(term.toLowerCase())
           ) {
             if (!results.find((r) => r.row === index + 1)) {
               results.push({ row: index + 1, data: row });
