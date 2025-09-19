@@ -871,9 +871,11 @@ export default function Home() {
                       {Object.values(row).map((value, cellIndex) => (
                         <td
                           key={cellIndex}
-                          className={`border-2 border-gray-300 px-2 py-4 text-black font-bold bg-white group-hover:bg-green-100 transition-colors duration-0 w-auto whitespace-nowrap ${
+                          className={`border-2 border-gray-300 px-2 py-4 text-black font-bold ${
+                            index === 2 ? "bg-green-500" : "bg-white"
+                          } group-hover:bg-green-100 transition-colors duration-0 w-auto whitespace-nowrap ${
                             index === 2
-                              ? "sticky top-0 z-20 bg-green-500 text-black font-bold"
+                              ? "sticky top-0 z-20 text-black font-bold"
                               : ""
                           } ${index === 2 ? "font-bold" : ""} ${
                             hoveredColumn === cellIndex + 1
