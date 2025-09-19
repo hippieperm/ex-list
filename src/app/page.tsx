@@ -782,15 +782,15 @@ export default function Home() {
                       <tr
                         key={index}
                         onClick={() => handleRowClick(result.row)}
-                        className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-200 hover:shadow-md hover:scale-[1.01] group cursor-pointer"
+                        className="hover:bg-yellow-100 transition-all duration-200 hover:shadow-md hover:scale-[1.01] group cursor-pointer"
                       >
-                        <td className="border border-gray-200 px-4 py-4 font-bold text-blue-600 bg-gradient-to-r from-blue-25 to-blue-50 group-hover:from-blue-100 group-hover:to-blue-150 transition-colors min-w-[80px]">
+                        <td className="border border-gray-200 px-4 py-4 font-bold text-blue-600 bg-gradient-to-r from-blue-25 to-blue-50 group-hover:bg-yellow-100 transition-colors min-w-[80px]">
                           {result.row}
                         </td>
                         {Object.values(result.data).map((value, cellIndex) => (
                           <td
                             key={cellIndex}
-                            className="border border-gray-200 px-4 py-4 text-gray-700 bg-white group-hover:bg-white transition-colors min-w-[120px] whitespace-nowrap"
+                            className="border border-gray-200 px-4 py-4 text-gray-700 bg-white group-hover:bg-yellow-100 transition-colors min-w-[120px] whitespace-nowrap"
                           >
                             <span className="text-sm font-medium">{value}</span>
                           </td>
@@ -825,7 +825,7 @@ export default function Home() {
                     <tr
                       key={index}
                       data-row={index + 1}
-                      className={`hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 transition-all duration-200 hover:shadow-md hover:scale-[1.01] group ${
+                      className={`hover:bg-yellow-100 transition-all duration-200 hover:shadow-md hover:scale-[1.01] group ${
                         highlightedRow === index + 1
                           ? "bg-gradient-to-r from-yellow-200 to-yellow-300 shadow-lg scale-[1.02] border-2 border-yellow-400"
                           : ""
@@ -836,22 +836,22 @@ export default function Home() {
                       }`}
                     >
                       <td
-                        className={`border border-gray-200 px-4 py-4 font-bold text-green-600 bg-gradient-to-r from-green-25 to-green-50 group-hover:from-green-100 group-hover:to-green-150 transition-colors min-w-[80px] ${
+                        className={`border border-gray-200 px-4 py-4 font-bold text-green-600 bg-gradient-to-r from-green-25 to-green-50 group-hover:bg-yellow-100 transition-colors min-w-[80px] ${
                           index === 2
                             ? "sticky top-0 z-20 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold"
                             : ""
-                        }`}
+                        } ${index === 2 ? "font-bold" : ""}`}
                       >
                         {index + 1}
                       </td>
                       {Object.values(row).map((value, cellIndex) => (
                         <td
                           key={cellIndex}
-                          className={`border border-gray-200 px-4 py-4 text-gray-700 bg-white group-hover:bg-white transition-colors min-w-[120px] whitespace-nowrap ${
+                          className={`border border-gray-200 px-4 py-4 text-gray-700 bg-white group-hover:bg-yellow-100 transition-colors min-w-[120px] whitespace-nowrap ${
                             index === 2
                               ? "sticky top-0 z-20 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold"
                               : ""
-                          }`}
+                          } ${index === 2 ? "font-bold" : ""}`}
                         >
                           <span className="text-sm font-medium">{value}</span>
                         </td>
