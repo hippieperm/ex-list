@@ -806,7 +806,7 @@ export default function Home() {
                         {Object.values(result.data).map((value, cellIndex) => (
                           <td
                             key={cellIndex}
-                            className={`border border-gray-200 px-4 py-4 text-gray-700 bg-white group-hover:bg-green-100 transition-colors duration-0 min-w-[120px] whitespace-nowrap ${
+                            className={`border border-gray-200 px-2 py-4 text-gray-700 bg-white group-hover:bg-green-100 transition-colors duration-0 w-auto whitespace-nowrap ${
                               hoveredColumn === cellIndex + 1
                                 ? "bg-yellow-100"
                                 : ""
@@ -871,7 +871,7 @@ export default function Home() {
                       {Object.values(row).map((value, cellIndex) => (
                         <td
                           key={cellIndex}
-                          className={`border border-gray-200 px-4 py-4 text-gray-700 bg-white group-hover:bg-green-100 transition-colors duration-0 min-w-[120px] whitespace-nowrap ${
+                          className={`border border-gray-200 px-2 py-4 text-gray-700 bg-white group-hover:bg-green-100 transition-colors duration-0 w-auto whitespace-nowrap ${
                             index === 2
                               ? "sticky top-0 z-20 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold"
                               : ""
