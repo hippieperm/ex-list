@@ -623,16 +623,16 @@ export default function Home() {
             ) : (
               <div className="overflow-x-auto border-2 border-gray-200 rounded-xl shadow-lg bg-white">
                 <table className="w-full border-collapse bg-white">
-                  <thead>
+                  <thead className="sticky top-0 z-10">
                     <tr className="bg-gradient-to-r from-blue-500 to-blue-600">
-                      <th className="border border-gray-300 px-6 py-4 text-left font-bold text-white text-sm uppercase tracking-wider shadow-sm">
+                      <th className="border border-gray-300 px-6 py-4 text-left font-bold text-white text-sm uppercase tracking-wider shadow-sm sticky top-0 bg-gradient-to-r from-blue-500 to-blue-600">
                         행 번호
                       </th>
                       {excelData.length > 0 &&
                         Object.keys(excelData[0]).map((key, index) => (
                           <th
                             key={index}
-                            className="border border-gray-300 px-6 py-4 text-left font-bold text-white text-sm uppercase tracking-wider shadow-sm"
+                            className="border border-gray-300 px-6 py-4 text-left font-bold text-white text-sm uppercase tracking-wider shadow-sm sticky top-0 bg-gradient-to-r from-blue-500 to-blue-600"
                           >
                             {key}
                           </th>
@@ -646,13 +646,13 @@ export default function Home() {
                         onClick={() => handleRowClick(result.row)}
                         className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-200 hover:shadow-md hover:scale-[1.01] group cursor-pointer"
                       >
-                        <td className="border border-gray-200 px-6 py-4 font-bold text-blue-600 bg-gradient-to-r from-blue-25 to-blue-50 group-hover:from-blue-100 group-hover:to-blue-150 transition-colors">
+                        <td className="border border-gray-200 px-4 py-4 font-bold text-blue-600 bg-gradient-to-r from-blue-25 to-blue-50 group-hover:from-blue-100 group-hover:to-blue-150 transition-colors min-w-[80px]">
                           {result.row}
                         </td>
                         {Object.values(result.data).map((value, cellIndex) => (
                           <td
                             key={cellIndex}
-                            className="border border-gray-200 px-6 py-4 text-gray-700 bg-white group-hover:bg-white transition-colors"
+                            className="border border-gray-200 px-4 py-4 text-gray-700 bg-white group-hover:bg-white transition-colors min-w-[120px] whitespace-nowrap"
                           >
                             <span className="text-sm font-medium">{value}</span>
                           </td>
@@ -679,25 +679,9 @@ export default function Home() {
             </h2>
             <div
               id="full-data-table"
-              className="overflow-x-auto border-2 border-gray-200 rounded-xl shadow-lg bg-white"
+              className="overflow-x-auto overflow-y-auto border-2 border-gray-200 rounded-xl shadow-lg bg-white max-h-[70vh]"
             >
               <table className="w-full border-collapse bg-white">
-                <thead>
-                  <tr className="bg-gradient-to-r from-green-500 to-green-600">
-                    <th className="border border-gray-300 px-6 py-4 text-left font-bold text-white text-sm uppercase tracking-wider shadow-sm">
-                      행 번호
-                    </th>
-                    {excelData.length > 0 &&
-                      Object.keys(excelData[0]).map((key, index) => (
-                        <th
-                          key={index}
-                          className="border border-gray-300 px-6 py-4 text-left font-bold text-white text-sm uppercase tracking-wider shadow-sm"
-                        >
-                          {key}
-                        </th>
-                      ))}
-                  </tr>
-                </thead>
                 <tbody className="divide-y divide-gray-200">
                   {excelData.map((row, index) => (
                     <tr
@@ -707,15 +691,29 @@ export default function Home() {
                         highlightedRow === index + 1
                           ? "bg-gradient-to-r from-yellow-200 to-yellow-300 shadow-lg scale-[1.02] border-2 border-yellow-400"
                           : ""
+                      } ${
+                        index === 2
+                          ? "sticky top-0 z-20 bg-gradient-to-r from-green-500 to-green-600 shadow-lg"
+                          : ""
                       }`}
                     >
-                      <td className="border border-gray-200 px-6 py-4 font-bold text-green-600 bg-gradient-to-r from-green-25 to-green-50 group-hover:from-green-100 group-hover:to-green-150 transition-colors">
+                      <td
+                        className={`border border-gray-200 px-4 py-4 font-bold text-green-600 bg-gradient-to-r from-green-25 to-green-50 group-hover:from-green-100 group-hover:to-green-150 transition-colors min-w-[80px] ${
+                          index === 2
+                            ? "sticky top-0 z-20 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold"
+                            : ""
+                        }`}
+                      >
                         {index + 1}
                       </td>
                       {Object.values(row).map((value, cellIndex) => (
                         <td
                           key={cellIndex}
-                          className="border border-gray-200 px-6 py-4 text-gray-700 bg-white group-hover:bg-white transition-colors"
+                          className={`border border-gray-200 px-4 py-4 text-gray-700 bg-white group-hover:bg-white transition-colors min-w-[120px] whitespace-nowrap ${
+                            index === 2
+                              ? "sticky top-0 z-20 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold"
+                              : ""
+                          }`}
                         >
                           <span className="text-sm font-medium">{value}</span>
                         </td>
