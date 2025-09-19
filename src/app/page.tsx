@@ -25,6 +25,7 @@ export default function Home() {
   const [detectedRowInfo, setDetectedRowInfo] = useState("");
   const [fixedHeaders, setFixedHeaders] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [highlightedRow, setHighlightedRow] = useState<number | null>(null);
 
   // 경매장 엑셀의 고정 헤더 정의 (이미지 기준 - 17개 컬럼)
   const auctionHeaders = [
@@ -46,6 +47,37 @@ export default function Home() {
     "매출액",
     "비고",
   ];
+
+  // 행 클릭 핸들러 - 전체 데이터의 해당 행으로 스크롤
+  const handleRowClick = (rowNumber: number) => {
+    setHighlightedRow(rowNumber);
+
+    // 전체 데이터 테이블로 스크롤
+    const fullDataTable = document.getElementById("full-data-table");
+    if (fullDataTable) {
+      // 테이블 상단으로 스크롤
+      fullDataTable.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+
+      // 약간의 지연 후 해당 행으로 정확히 이동
+      setTimeout(() => {
+        const targetRow = document.querySelector(`tr[data-row="${rowNumber}"]`);
+        if (targetRow) {
+          targetRow.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        }
+      }, 500);
+
+      // 3초 후 하이라이트 제거
+      setTimeout(() => {
+        setHighlightedRow(null);
+      }, 3000);
+    }
+  };
 
   // 초성 변환 함수
   const getInitials = (text: string): string => {
@@ -314,6 +346,8 @@ export default function Home() {
       // 시작 행 설정 (헤더가 있는 경우 보통 2번째 줄부터)
       const jsonData = XLSX.utils.sheet_to_json(worksheet, {
         range: actualStartRow - 1, // 0-based index이므로 -1
+        raw: false, // 원본 값 유지 (퍼센트, 날짜 등 포맷 보존)
+        defval: "", // 빈 셀은 빈 문자열로 처리
       }) as ExcelData[];
 
       // 엑셀 데이터를 그대로 사용
@@ -566,14 +600,19 @@ export default function Home() {
         {/* 검색 결과 */}
         {searchTerm && (
           <div className="bg-white rounded-xl shadow-xl border border-gray-200 p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
-                <Users className="w-6 h-6 text-green-600" />
-                검색 결과
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-3">
+                <span className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-lg shadow-md flex items-center gap-2">
+                  <Users className="w-5 h-5" />
+                  검색 결과
+                </span>
+                <span className="bg-gray-100 text-gray-700 px-3 py-2 rounded-lg text-lg font-semibold">
+                  {isSearching ? "검색 중..." : `${searchResults.length}개`}
+                </span>
               </h2>
-              <span className="text-sm text-gray-500">
-                {isSearching ? "검색 중..." : `${searchResults.length}개 결과`}
-              </span>
+              <div className="text-sm text-gray-500 bg-blue-50 px-3 py-2 rounded-lg border border-blue-200">
+                💡 행을 클릭하면 전체 데이터에서 해당 위치로 이동합니다
+              </div>
             </div>
 
             {searchResults.length === 0 ? (
@@ -582,39 +621,40 @@ export default function Home() {
                 <p>검색 결과가 없습니다</p>
               </div>
             ) : (
-              <div className="overflow-x-auto border border-gray-300 rounded-lg">
+              <div className="overflow-x-auto border-2 border-gray-200 rounded-xl shadow-lg bg-white">
                 <table className="w-full border-collapse bg-white">
                   <thead>
-                    <tr className="bg-blue-50">
-                      <th className="border-2 border-gray-300 px-4 py-3 text-left font-semibold text-gray-800 bg-blue-100">
+                    <tr className="bg-gradient-to-r from-blue-500 to-blue-600">
+                      <th className="border border-gray-300 px-6 py-4 text-left font-bold text-white text-sm uppercase tracking-wider shadow-sm">
                         행 번호
                       </th>
                       {excelData.length > 0 &&
                         Object.keys(excelData[0]).map((key, index) => (
                           <th
                             key={index}
-                            className="border-2 border-gray-300 px-4 py-3 text-left font-semibold text-gray-800 bg-blue-100"
+                            className="border border-gray-300 px-6 py-4 text-left font-bold text-white text-sm uppercase tracking-wider shadow-sm"
                           >
                             {key}
                           </th>
                         ))}
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody className="divide-y divide-gray-200">
                     {searchResults.map((result, index) => (
                       <tr
                         key={index}
-                        className="hover:bg-blue-50 transition-colors"
+                        onClick={() => handleRowClick(result.row)}
+                        className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-200 hover:shadow-md hover:scale-[1.01] group cursor-pointer"
                       >
-                        <td className="border-2 border-gray-300 px-4 py-3 font-semibold text-blue-700 bg-blue-25">
+                        <td className="border border-gray-200 px-6 py-4 font-bold text-blue-600 bg-gradient-to-r from-blue-25 to-blue-50 group-hover:from-blue-100 group-hover:to-blue-150 transition-colors">
                           {result.row}
                         </td>
                         {Object.values(result.data).map((value, cellIndex) => (
                           <td
                             key={cellIndex}
-                            className="border-2 border-gray-300 px-4 py-3 text-gray-700 bg-white"
+                            className="border border-gray-200 px-6 py-4 text-gray-700 bg-white group-hover:bg-white transition-colors"
                           >
-                            {String(value)}
+                            <span className="text-sm font-medium">{value}</span>
                           </td>
                         ))}
                       </tr>
@@ -629,42 +669,55 @@ export default function Home() {
         {/* 전체 데이터 테이블 */}
         {excelData.length > 0 && (
           <div className="mt-8">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">
-              📊 전체 데이터 ({excelData.length}행)
+            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+              <span className="bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-2 rounded-lg shadow-md">
+                📊 전체 데이터
+              </span>
+              <span className="bg-gray-100 text-gray-700 px-3 py-2 rounded-lg text-lg font-semibold">
+                {excelData.length}행
+              </span>
             </h2>
-            <div className="overflow-x-auto border border-gray-300 rounded-lg">
+            <div
+              id="full-data-table"
+              className="overflow-x-auto border-2 border-gray-200 rounded-xl shadow-lg bg-white"
+            >
               <table className="w-full border-collapse bg-white">
                 <thead>
-                  <tr className="bg-gray-50">
-                    <th className="border-2 border-gray-300 px-4 py-3 text-left font-semibold text-gray-800 bg-gray-100">
+                  <tr className="bg-gradient-to-r from-green-500 to-green-600">
+                    <th className="border border-gray-300 px-6 py-4 text-left font-bold text-white text-sm uppercase tracking-wider shadow-sm">
                       행 번호
                     </th>
                     {excelData.length > 0 &&
                       Object.keys(excelData[0]).map((key, index) => (
                         <th
                           key={index}
-                          className="border-2 border-gray-300 px-4 py-3 text-left font-semibold text-gray-800 bg-gray-100"
+                          className="border border-gray-300 px-6 py-4 text-left font-bold text-white text-sm uppercase tracking-wider shadow-sm"
                         >
                           {key}
                         </th>
                       ))}
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y divide-gray-200">
                   {excelData.map((row, index) => (
                     <tr
                       key={index}
-                      className="hover:bg-gray-50 transition-colors"
+                      data-row={index + 1}
+                      className={`hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 transition-all duration-200 hover:shadow-md hover:scale-[1.01] group ${
+                        highlightedRow === index + 1
+                          ? "bg-gradient-to-r from-yellow-200 to-yellow-300 shadow-lg scale-[1.02] border-2 border-yellow-400"
+                          : ""
+                      }`}
                     >
-                      <td className="border-2 border-gray-300 px-4 py-3 font-semibold text-blue-700 bg-blue-25">
+                      <td className="border border-gray-200 px-6 py-4 font-bold text-green-600 bg-gradient-to-r from-green-25 to-green-50 group-hover:from-green-100 group-hover:to-green-150 transition-colors">
                         {index + 1}
                       </td>
                       {Object.values(row).map((value, cellIndex) => (
                         <td
                           key={cellIndex}
-                          className="border-2 border-gray-300 px-4 py-3 text-gray-700 bg-white"
+                          className="border border-gray-200 px-6 py-4 text-gray-700 bg-white group-hover:bg-white transition-colors"
                         >
-                          {String(value)}
+                          <span className="text-sm font-medium">{value}</span>
                         </td>
                       ))}
                     </tr>
