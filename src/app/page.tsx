@@ -835,7 +835,7 @@ export default function Home() {
             </h2>
             <div
               id="full-data-table"
-              className="overflow-x-auto overflow-y-auto border-2 border-gray-200 rounded-xl shadow-lg bg-white max-h-[70vh]"
+              className="overflow-x-auto overflow-y-auto border-2 border-gray-200 rounded-xl shadow-lg bg-white max-h-[90vh]"
             >
               <table className="w-full border-collapse bg-white">
                 <tbody className="divide-y divide-gray-200">
