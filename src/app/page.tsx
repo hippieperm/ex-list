@@ -26,7 +26,7 @@ export default function Home() {
   const [fixedHeaders, setFixedHeaders] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [highlightedRow, setHighlightedRow] = useState<number | null>(null);
-  const [hoveredColumn, setHoveredColumn] = useState<number | null>(null);
+  const [clickedColumn, setClickedColumn] = useState<number | null>(null);
 
   // 경매장 엑셀의 고정 헤더 정의 (이미지 기준 - 17개 컬럼)
   const auctionHeaders = [
@@ -48,9 +48,9 @@ export default function Home() {
     "비고",
   ];
 
-  // 컬럼 호버 핸들러
-  const handleColumnHover = (columnIndex: number | null) => {
-    setHoveredColumn(columnIndex);
+  // 컬럼 클릭 핸들러
+  const handleColumnClick = (columnIndex: number | null) => {
+    setClickedColumn(columnIndex);
   };
 
   // 행 클릭 핸들러 - 전체 데이터의 해당 행으로 스크롤
@@ -770,9 +770,8 @@ export default function Home() {
                   <thead className="sticky top-0 z-10">
                     <tr className="bg-blue-500">
                       <th
-                        className="border-2 border-gray-400 px-6 py-4 text-left font-bold text-white text-sm uppercase tracking-wider shadow-sm sticky top-0 bg-blue-500"
-                        onMouseEnter={() => handleColumnHover(0)}
-                        onMouseLeave={() => handleColumnHover(null)}
+                        className="border-2 border-gray-400 px-6 py-4 text-left font-bold text-white text-sm uppercase tracking-wider shadow-sm sticky top-0 bg-blue-500 cursor-pointer"
+                        onClick={() => handleColumnClick(0)}
                       >
                         행 번호
                       </th>
@@ -780,9 +779,8 @@ export default function Home() {
                         Object.keys(excelData[0]).map((key, index) => (
                           <th
                             key={index}
-                            className="border-2 border-gray-400 px-6 py-4 text-left font-bold text-white text-sm uppercase tracking-wider shadow-sm sticky top-0 bg-blue-500"
-                            onMouseEnter={() => handleColumnHover(index + 1)}
-                            onMouseLeave={() => handleColumnHover(null)}
+                            className="border-2 border-gray-400 px-6 py-4 text-left font-bold text-white text-sm uppercase tracking-wider shadow-sm sticky top-0 bg-blue-500 cursor-pointer"
+                            onClick={() => handleColumnClick(index + 1)}
                           >
                             {key}
                           </th>
@@ -798,7 +796,7 @@ export default function Home() {
                       >
                         <td
                           className={`border-2 border-gray-300 px-4 py-4 font-bold text-black bg-blue-50 group-hover:bg-green-100 transition-colors duration-0 min-w-[80px] ${
-                            hoveredColumn === 0 ? "bg-yellow-100" : ""
+                            clickedColumn === 0 ? "bg-yellow-100" : ""
                           }`}
                         >
                           {result.row}
@@ -807,7 +805,7 @@ export default function Home() {
                           <td
                             key={cellIndex}
                             className={`border-2 border-gray-300 px-2 py-4 text-black font-bold bg-white group-hover:bg-green-100 transition-colors duration-0 w-auto whitespace-nowrap ${
-                              hoveredColumn === cellIndex + 1
+                              clickedColumn === cellIndex + 1
                                 ? "bg-yellow-100"
                                 : ""
                             }`}
@@ -861,10 +859,9 @@ export default function Home() {
                             ? "sticky top-0 z-20 bg-green-500 text-black font-bold"
                             : ""
                         } ${index === 2 ? "font-bold" : ""} ${
-                          hoveredColumn === 0 ? "bg-yellow-100" : ""
+                          clickedColumn === 0 ? "bg-yellow-100" : ""
                         }`}
-                        onMouseEnter={() => handleColumnHover(0)}
-                        onMouseLeave={() => handleColumnHover(null)}
+                        onClick={() => handleColumnClick(0)}
                       >
                         {index + 1}
                       </td>
@@ -878,12 +875,11 @@ export default function Home() {
                               ? "sticky top-0 z-20 text-black font-bold"
                               : ""
                           } ${index === 2 ? "font-bold" : ""} ${
-                            hoveredColumn === cellIndex + 1
+                            clickedColumn === cellIndex + 1
                               ? "bg-yellow-100"
                               : ""
                           }`}
-                          onMouseEnter={() => handleColumnHover(cellIndex + 1)}
-                          onMouseLeave={() => handleColumnHover(null)}
+                          onClick={() => handleColumnClick(cellIndex + 1)}
                         >
                           <span className="text-sm font-medium">{value}</span>
                         </td>
